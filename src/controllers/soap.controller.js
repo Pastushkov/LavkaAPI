@@ -9,9 +9,7 @@ const createSoap = async (req, res) => {
     return res.status(201).json({
       status: true,
       error: null,
-      payload: {
-        soap,
-      },
+      payload: soap,
     });
   } catch (error) {
     return res.status(500).json({
@@ -101,7 +99,7 @@ const getAllSoap = async (req, res) => {
 
 const getSoapById = async (req, res) => {
   try {
-    const id = req.params.id
+    const id = req.params.id;
 
     if (!id)
       return res.status(400).json({
@@ -112,17 +110,17 @@ const getSoapById = async (req, res) => {
         },
       });
 
-      const soap = await Soap.findById(id);
+    const soap = await Soap.findById(id);
 
-      if (!soap)
-        return res.status(400).json({
-          status: false,
-          payload: null,
-          error: {
-            error: "soap not found",
-          },
-        });
-  
+    if (!soap)
+      return res.status(400).json({
+        status: false,
+        payload: null,
+        error: {
+          error: "soap not found",
+        },
+      });
+
     return res.status(200).json({
       status: true,
       error: null,
@@ -144,5 +142,5 @@ module.exports = {
   createSoap,
   patchSoap,
   getAllSoap,
-  getSoapById
+  getSoapById,
 };
