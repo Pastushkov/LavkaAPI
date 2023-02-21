@@ -4,7 +4,7 @@ const { jwtSecret } = require("../config");
 const authMiddleware = (req, res, next) => {
   if (req.method === "OPTIONS") return next();
   const authHeader = req.headers.authorization;
-  if (authHeader) {
+  if (authHeader) {    
     const token = authHeader.split(" ")[1];
     jwt.verify(token, jwtSecret, (err, user) => {
       if (err)

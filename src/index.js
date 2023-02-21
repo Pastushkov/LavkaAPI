@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 app.use(helmet())
 
-app.use(express.static("doc"));
+app.use(express.static(__dirname));
 
 app.use("/", require("./routes"));
 

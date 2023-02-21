@@ -1,6 +1,7 @@
 const router = require("express")();
 const promController = require("../../controllers/prom.controller");
-
+const authMiddleware = require("../../middlewares/auth.middleware");
+const accessMiddleware = require("../../middlewares/access.middleware");
 /**
  * @api {get} /prom/products/list?limit=10&last_id=12312313 Get products list from prom
  * @apiVersion 1.0.0
@@ -9,7 +10,7 @@ const promController = require("../../controllers/prom.controller");
  *
  * @apiQuery {String} limit Limit of products
  * @apiQuery {String} last_id Last id of product
- * 
+ *
  * @apiSuccess {json} object object with payload
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
@@ -77,7 +78,7 @@ const promController = require("../../controllers/prom.controller");
  *           }
  *       },
  * ]
- *      
+ *
  *  },
  *      error: null,
  * }
@@ -109,7 +110,7 @@ router.get("/list", promController.getProductsList);
  *     HTTP/1.1 200 OK
  *     {
  *      status: true,
- *      payload: 
+ *      payload:
  *  {
  * "id": 1771742406,
  *           "external_id": null,
@@ -169,8 +170,8 @@ router.get("/list", promController.getProductsList);
  *               "uk": "Моя тестова позиція Updated"
  *           }
  *       },
- *  
- * 
+ *
+ *
  *      error: null,
  * }
  *
@@ -186,8 +187,7 @@ router.get("/list", promController.getProductsList);
  *        code: 400 },
  *     }
  */
-router.get("/:id",promController.getProductById)
-
+router.get("/:id", promController.getProductById);
 
 /**
  * @api {get} /prom/products/translation/:id Get product transaltion from prom by id
@@ -207,7 +207,7 @@ router.get("/:id",promController.getProductById)
  *       "keywords": "Тест, Тестова позиція, Інтеграція",
  *       "description": "UK Це моя тестова позиція. Това є не існуючим."
  *      }
- * 
+ *
  *      error: null,
  * }
  *
@@ -223,19 +223,24 @@ router.get("/:id",promController.getProductById)
  *        code: 400 },
  *     }
  */
-router.get("/translation/:id",promController.getTranslationById)
+router.get(
+  "/translation/:id",
+  authMiddleware,
+  accessMiddleware,
+  promController.getTranslationById
+);
 
 /**
  * @api {put} /prom/products/translation Update product transaltion from prom by id
  * @apiVersion 1.0.0
- * @apiName GetSoapTranslationByIdFromprom
+ * @apiName UpdateSoapTranslationByIdFromProm
  * @apiGroup Prom
  *
  * @apiBody {String} id Product id
  * @apiBody {String} name Product name
  * @apiBody {String} keywords Product keywords
  * @apiBody {String} description Product description
- * 
+ *
  * @apiSuccess {json} object object with payload
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
@@ -246,7 +251,7 @@ router.get("/translation/:id",promController.getTranslationById)
  *       "keywords": "Тест, Тестова позиція, Інтеграція",
  *       "description": "UK Це моя тестова позиція. Това є не існуючим."
  *      }
- * 
+ *
  *      error: null,
  * }
  *
@@ -262,5 +267,10 @@ router.get("/translation/:id",promController.getTranslationById)
  *        code: 400 },
  *     }
  */
-router.put("/translation",promController.updateTranslationById)
-module.exports = router
+router.put(
+  "/translation",
+  authMiddleware,
+  accessMiddleware,
+  promController.updateTranslationById
+);
+module.exports = router;
