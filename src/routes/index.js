@@ -11,7 +11,7 @@ router.use("/", appRoutes);
 router.use("/auth", authRoutes);
 router.use("/soap", soapRoutes);
 router.use("/email", emailRoutes);
-router.use('/prom',authMiddleware, promRoutes)
+router.use('/prom',promRoutes)
 router.use('/users',userRoutes)
 
 module.exports = router;
