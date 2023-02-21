@@ -228,7 +228,7 @@ router.get("/translation/:id",promController.getTranslationById)
 /**
  * @api {put} /prom/products/translation Update product transaltion from prom by id
  * @apiVersion 1.0.0
- * @apiName GetSoapTranslationByIdFromprom
+ * @apiName UpdateSoapTranslationByIdFromProm
  * @apiGroup Prom
  *
  * @apiBody {String} id Product id
