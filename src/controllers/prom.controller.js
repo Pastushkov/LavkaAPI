@@ -79,10 +79,10 @@ const getTranslationById = async (req, res) => {
 
 const updateTranslationById = async (req, res) => {
   try {
-    const { id, name, keywords, description } = req.body;
+    const { id, name, keywords, description,lang} = req.body;
     const response = await axiosInstance.put(`/translation`, {
       product_id: id,
-      lang: "uk",
+      lang,
       name,
       keywords,
       description,
