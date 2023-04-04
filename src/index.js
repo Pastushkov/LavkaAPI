@@ -5,6 +5,7 @@ const cors = require("cors");
 const { port, dbUrl } = require("./config");
 const initDB = require("./services/db");
 const path = require("path");
+
 app.use(express.json());
 app.use(cors());
 app.use(helmet())
@@ -20,6 +21,8 @@ app.get("/doc", (req, res, next) => {
     console.log(error);
   }
 });
+
+
 app.listen(port, () => {
   initDB(dbUrl);
   console.log(`APP listen on port ${port}`);

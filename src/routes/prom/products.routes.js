@@ -269,8 +269,8 @@ router.get(
  */
 router.put(
   "/translation",
-  authMiddleware,
-  accessMiddleware,
+  // authMiddleware,
+  // accessMiddleware,
   promController.updateTranslationById
 );
 module.exports = router;

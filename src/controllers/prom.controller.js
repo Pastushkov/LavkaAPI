@@ -79,17 +79,17 @@ const getTranslationById = async (req, res) => {
 
 const updateTranslationById = async (req, res) => {
   try {
-    const { id, name, keywords, description,lang} = req.body;
+    const { product_id, name, keywords, description,lang} = req.body;
+
     const response = await axiosInstance.put(`/translation`, {
-      product_id: id,
+      product_id,
       lang,
       name,
       keywords,
       description,
-    });
-    console.log(response.data.status);
+    });    
     if (response.data.status === "success") {
-      const translated = await axiosInstance.get(`/translation/${id}?lang=uk`);
+      const translated = await axiosInstance.get(`/translation/${product_id}?lang=${lang}`);
       return res.status(200).json({
         status: true,
         error: null,
