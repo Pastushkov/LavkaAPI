@@ -273,4 +273,7 @@ router.put(
   // accessMiddleware,
   promController.updateTranslationById
 );
+
+router.put("/edit", promController.updateProductById);
+
 module.exports = router;

@@ -79,7 +79,7 @@ const getTranslationById = async (req, res) => {
 
 const updateTranslationById = async (req, res) => {
   try {
-    const { product_id, name, keywords, description,lang} = req.body;
+    const { product_id, name, keywords, description, lang } = req.body;
 
     const response = await axiosInstance.put(`/translation`, {
       product_id,
@@ -87,9 +87,11 @@ const updateTranslationById = async (req, res) => {
       name,
       keywords,
       description,
-    });    
+    });
     if (response.data.status === "success") {
-      const translated = await axiosInstance.get(`/translation/${product_id}?lang=${lang}`);
+      const translated = await axiosInstance.get(
+        `/translation/${product_id}?lang=${lang}`
+      );
       return res.status(200).json({
         status: true,
         error: null,
@@ -113,9 +115,33 @@ const updateTranslationById = async (req, res) => {
   }
 };
 
+const updateProductById = async (req, res) => {
+  try {    
+    const response = await axiosInstance.post("/edit",[{
+      ...req.body
+    }]);
+
+    return res.status(200).json({
+      status: true,
+      payload: response.data,
+      error: null,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      staus: false,
+      payload: null,
+      error: {
+        error: "Error in Prom update product by id",
+        description: error.toString(),
+      },
+    });
+  }
+};
+
 module.exports = {
   getProductsList,
   getProductById,
   getTranslationById,
   updateTranslationById,
+  updateProductById,
 };
