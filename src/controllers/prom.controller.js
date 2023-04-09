@@ -116,11 +116,11 @@ const updateTranslationById = async (req, res) => {
 };
 
 const updateProductById = async (req, res) => {
-  try {    
-    const response = await axiosInstance.post("/edit",[{
+  try {  
+    const reqbody=[{
       ...req.body
-    }]);
-
+    }]
+    const response = await axiosInstance.post("/edit",reqbody);
     return res.status(200).json({
       status: true,
       payload: response.data,
