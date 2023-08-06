@@ -1,3 +1,4 @@
+const { defaultUserType } = require("../config");
 const User = require("../models/user");
 
 const removeSecretFields = (array) => {
@@ -7,37 +8,10 @@ const removeSecretFields = (array) => {
   });
 };
 
-const getUsersList = async (req, res) => {
-  try {
-    const users = await User.find({ type: "shipper" });
-    if (!users)
-      return res.status(400).json({
-        status: false,
-        payload: null,
-        error: {
-          error: "Users not found",
-        },
-      });
-    return res.status(200).json({
-      status: false,
-      payload: removeSecretFields(users),
-      error: null,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: false,
-      payload: null,
-      error: {
-        description: error.toString(),
-        error: "Error in get users list",
-      },
-    });
-  }
-};
 
-const getUserById = async (req, res) => {
+const getUserMe = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.user;
     if (!id)
       return res.status(400).json({
         status: false,
@@ -74,53 +48,6 @@ const getUserById = async (req, res) => {
   }
 };
 
-const updateUserById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id)
-      return res.status(400).json({
-        status: false,
-        payload: null,
-        error: {
-          error: "id param required",
-        },
-      });
-    const user = await User.findOneAndUpdate(
-      { id },
-      {
-        ...req.body,
-      },
-      {
-        new: true,
-      }
-    );
-    if (!user)
-      return res.status(400).json({
-        status: false,
-        payload: null,
-        error: {
-          error: "User not found",
-        },
-      });
-
-    user.password = null;
-    return res.status(200).json({
-      status: false,
-      payload: user,
-      error: null,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: false,
-      payload: null,
-      error: {
-        description: error.toString(),
-        error: "Error in update user by id",
-      },
-    });
-  }
-};
-
 const updateUserSelf = async (req, res) => {
   try {
     const { id } = req.user;
@@ -133,7 +60,7 @@ const updateUserSelf = async (req, res) => {
         },
       });
 
-    req.body.type = "shipper";
+    req.body.type = defaultUserType;
 
     const user = await User.findOneAndUpdate(
       { id },
@@ -156,7 +83,6 @@ const updateUserSelf = async (req, res) => {
     return res.status(200).json({
       status: false,
       payload: user,
-
       error: null,
     });
   } catch (error) {
@@ -172,8 +98,6 @@ const updateUserSelf = async (req, res) => {
 };
 
 module.exports = {
-  getUserById,
-  getUsersList,
-  updateUserById,
+  getUserMe,
   updateUserSelf,
 };

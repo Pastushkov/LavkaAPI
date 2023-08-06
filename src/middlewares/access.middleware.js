@@ -1,6 +1,8 @@
+const { defaultUserType } = require("../config");
+
 const accessMiddleware = (req, res, next) => {
-  try {        
-    if (req.user && req.user.type === "superAdmin") return next();    
+  try {
+    if (req.user && req.user.type === defaultUserType) return next();
     return res.status(403).json({
       status: false,
       payload: null,

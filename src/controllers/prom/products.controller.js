@@ -1,28 +1,33 @@
 const axios = require("axios");
-const { promToken } = require("../config");
 
-// 1771742406 - тестовий товар
+const productsUrl = "/products";
 
-const axiosInstance = axios.create({
-  baseURL: "https://my.prom.ua/api/v1/products",
-  headers: {
-    Authorization: `Bearer ${promToken}`,
-  },
-});
+const createAxiosInstance = (token, url) => {
+  return axios.create({
+    baseURL: `https://my.prom.ua/api/v1/${url}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
 const getProductsList = async (req, res) => {
+  const { limit, last_id } = req.query;
+  const query = "";
+  if (limit) {
+    query = `?limit=${limit}`;
+  }
+  if (last_id) {
+    query = `${limit ? "&" : "?"}last_id=${last_id}`;
+  }
+  const axiosInstance = createAxiosInstance(req.user.promToken, productsUrl);
+  let response;
   try {
-    const { limit, last_id } = req.query;
-    const response = await axiosInstance.get(
+    response = await axiosInstance.get(
       `/list${limit ? `?limit=${limit}` : ""}${
         last_id ? `&last_id=${last_id}` : ""
       }`
     );
-    return res.status(200).json({
-      status: true,
-      error: null,
-      payload: response.data.products,
-    });
   } catch (error) {
     return res.status(500).json({
       staus: false,
@@ -33,17 +38,24 @@ const getProductsList = async (req, res) => {
       },
     });
   }
+  const list = response?.data?.products;
+  const total = list ? list.length : 0;
+  return res.status(200).json({
+    status: true,
+    error: null,
+    payload: {
+      list,
+      total,
+    },
+  });
 };
 
 const getProductById = async (req, res) => {
+  const axiosInstance = createAxiosInstance(req.user.promToken, productsUrl);
+  const { id } = req.params;
+  let response;
   try {
-    const { id } = req.params;
-    const response = await axiosInstance.get(`/${id}`);
-    return res.status(200).json({
-      status: true,
-      error: null,
-      payload: response.data.product,
-    });
+    response = await axiosInstance.get(`/${id}`);
   } catch (error) {
     return res.status(500).json({
       staus: false,
@@ -54,17 +66,19 @@ const getProductById = async (req, res) => {
       },
     });
   }
+  return res.status(200).json({
+    status: true,
+    error: null,
+    payload: response?.data?.product ?? {},
+  });
 };
 
 const getTranslationById = async (req, res) => {
+  const axiosInstance = createAxiosInstance(req.user.promToken, productsUrl);
+  const { id } = req.params;
+  let response;
   try {
-    const { id } = req.params;
-    const response = await axiosInstance.get(`/translation/${id}?lang=uk`);
-    return res.status(200).json({
-      status: true,
-      error: null,
-      payload: response.data,
-    });
+    response = await axiosInstance.get(`/translation/${id}?lang=uk`);
   } catch (error) {
     return res.status(500).json({
       staus: false,
@@ -75,10 +89,16 @@ const getTranslationById = async (req, res) => {
       },
     });
   }
+  return res.status(200).json({
+    status: true,
+    error: null,
+    payload: response?.data ?? {},
+  });
 };
 
 const updateTranslationById = async (req, res) => {
   try {
+    const axiosInstance = createAxiosInstance(req.user.promToken, productsUrl);
     const { product_id, name, keywords, description, lang } = req.body;
 
     const response = await axiosInstance.put(`/translation`, {
@@ -116,11 +136,14 @@ const updateTranslationById = async (req, res) => {
 };
 
 const updateProductById = async (req, res) => {
-  try {  
-    const reqbody=[{
-      ...req.body
-    }]
-    const response = await axiosInstance.post("/edit",reqbody);
+  try {
+    const axiosInstance = createAxiosInstance(req.user.promToken, productsUrl);
+    const reqbody = [
+      {
+        ...req.body,
+      },
+    ];
+    const response = await axiosInstance.post("/edit", reqbody);
     return res.status(200).json({
       status: true,
       payload: response.data,

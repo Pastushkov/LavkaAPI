@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { jwtSecret } = require("../config");
+const { jwtSecret, jwtTime } = require("../config");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
@@ -7,8 +7,9 @@ const generateAccessToken = (candidate) => {
   const payload = {
     id: candidate.id,
     type: candidate.type,
+    promToken: candidate.promToken
   };
-  return jwt.sign(payload, jwtSecret, { expiresIn: "24h" });
+  return jwt.sign(payload, jwtSecret, { expiresIn: jwtTime });
 };
 
 const login = async (req, res) => {
@@ -78,7 +79,6 @@ const register = async (req, res) => {
     const user = new User({
       ...body,
       email,
-      type: "shipper",
       password: await bcrypt.hash(password, 10),
     });
     await user.save();

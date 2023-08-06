@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { defaultUserType } = require("../config");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -13,22 +14,21 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    index: true
   },
   password: {
     type: String,
     required: true,
   },
-  address: {
-    type: Object,
-    default: {}
-  },
-  cart: {
-    type: Object,
-    default: {}
-  },
   type: {
     type: String,
-    default: "shipper",
+    default: defaultUserType,
+  },
+  promToken: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true
   },
 });
 

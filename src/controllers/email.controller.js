@@ -7,8 +7,8 @@ const { google } = require("googleapis");
 const clientId =
   "138905803774-hl2j7am5d0s8ol8b1ujj5dilj1v54pf4.apps.googleusercontent.com";
 const clientSecret = "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";
-const clientEmail = "dmytro@getmicroship.com"; //your gmail account you used to set the project up in google cloud console";
-const mailFrom = "dmytro@getmicroship.com";
+const clientEmail = "dimaspas62@gmail.com"; //your gmail account you used to set the project up in google cloud console";
+const mailFrom = "dimaspas62@gmail.com";
 const redirectUri = "https://developers.google.com/oauthplayground";
 const refreshToken =
   "1//045snp-dMImxNCgYIARAAGAQSNwF-L9IrwGc4cZuElzZAntWQzJ0VTeDDViZkxQ6_gAOy1v0ssFuoOwLHe-Lku0K5g7sfZXhcJZA";

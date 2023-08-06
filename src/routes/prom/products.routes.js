@@ -1,7 +1,8 @@
 const router = require("express")();
-const promController = require("../../controllers/prom.controller");
+const productsController = require("../../controllers/prom/products.controller");
 const authMiddleware = require("../../middlewares/auth.middleware");
 const accessMiddleware = require("../../middlewares/access.middleware");
+
 /**
  * @api {get} /prom/products/list?limit=10&last_id=12312313 Get products list from prom
  * @apiVersion 1.0.0
@@ -95,7 +96,12 @@ const accessMiddleware = require("../../middlewares/access.middleware");
  *        code: 400 },
  *     }
  */
-router.get("/list", promController.getProductsList);
+router.get(
+  "/list",
+  authMiddleware,
+  accessMiddleware,
+  productsController.getProductsList
+);
 
 /**
  * @api {get} /prom/products/:id Get product from prom by id
@@ -187,7 +193,12 @@ router.get("/list", promController.getProductsList);
  *        code: 400 },
  *     }
  */
-router.get("/:id", promController.getProductById);
+router.get(
+  "/:id",
+  authMiddleware,
+  accessMiddleware,
+  productsController.getProductById
+);
 
 /**
  * @api {get} /prom/products/translation/:id Get product transaltion from prom by id
@@ -227,7 +238,7 @@ router.get(
   "/translation/:id",
   authMiddleware,
   accessMiddleware,
-  promController.getTranslationById
+  productsController.getTranslationById
 );
 
 /**
@@ -269,11 +280,16 @@ router.get(
  */
 router.put(
   "/translation",
-  // authMiddleware,
-  // accessMiddleware,
-  promController.updateTranslationById
+  authMiddleware,
+  accessMiddleware,
+  productsController.updateTranslationById
 );
 
-router.put("/edit", promController.updateProductById);
+router.put(
+  "/edit",
+  authMiddleware,
+  accessMiddleware,
+  productsController.updateProductById
+);
 
 module.exports = router;
