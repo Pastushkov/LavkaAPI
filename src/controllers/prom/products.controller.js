@@ -23,11 +23,7 @@ const getProductsList = async (req, res) => {
   const axiosInstance = createAxiosInstance(req.user.promToken, productsUrl);
   let response;
   try {
-    response = await axiosInstance.get(
-      `/list${limit ? `?limit=${limit}` : ""}${
-        last_id ? `&last_id=${last_id}` : ""
-      }`
-    );
+    response = await axiosInstance.get(`/list${query}`);
   } catch (error) {
     return res.status(500).json({
       staus: false,

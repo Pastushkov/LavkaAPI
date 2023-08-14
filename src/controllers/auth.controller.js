@@ -7,7 +7,7 @@ const generateAccessToken = (candidate) => {
   const payload = {
     id: candidate.id,
     type: candidate.type,
-    promToken: candidate.promToken
+    promToken: candidate.promToken,
   };
   return jwt.sign(payload, jwtSecret, { expiresIn: jwtTime });
 };
@@ -86,7 +86,9 @@ const register = async (req, res) => {
     return res.status(200).json({
       status: true,
       error: null,
-      payload: user,
+      payload: {
+        success: true,
+      },
     });
   } catch (error) {
     const e = "Error while create user";
